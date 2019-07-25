@@ -1,6 +1,6 @@
 # prismagram-app
 
-screens :
+## screens :
 
 - [] Home
 - [] Search
@@ -8,3 +8,6 @@ screens :
 - [] Notification(Challenge)
 - [] Profile
 - [] Edit Profile (Challenge)
+- [] photo Detail
+- [] photo Comments (challenge)
+- [] photo Likes (challenge)
