@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, AsyncStorage } from "react-native";
-import { AppLoading, Font, Asset } from "expo";
+import { AppLoading } from "expo";
+import { Asset } from "expo-asset";
+import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 import { InMemoryCache } from "apollo-cache-inmemory"; //새로운 cache를 만들기 위함.
 import { persistCache } from "apollo-cache-persist"; // 캐시 유지
@@ -40,6 +42,7 @@ export default function App() {
 
       //check islogin
       const isLoggedIn = AsyncStorage.getItem("isLoggedIn");
+      console.log(isLoggedIn);
       if (isLoggedIn === null || isLoggedIn === false) {
         setIsLoggedIn(false);
       } else {
@@ -61,7 +64,7 @@ export default function App() {
   return loaded && client && isLoggedIn !== null ? (
     <ThemeProvider theme={Theme}>
       <ApolloProvider client={client}>
-        <Text>Open up App..log(); your app!</Text>
+        {isLoggedIn ? <Text>i'm in</Text> : <Text>I'm out</Text>}
       </ApolloProvider>
     </ThemeProvider>
   ) : (
