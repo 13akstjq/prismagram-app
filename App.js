@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, AsyncStorage } from "react-native";
+import { AsyncStorage } from "react-native";
 import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
@@ -11,6 +11,8 @@ import ApolloClient from "apollo-boost"; // ApolloClient를 쉽게 setting하기
 import { ApolloProvider } from "react-apollo-hooks"; //react-apollo에서 react-hooks를 사용하기 위함.
 import { ThemeProvider } from "styled-components";
 import Theme from "./Styles/Theme";
+import NavContainer from "./components/NavContainer";
+import { AuthProvider } from "./AuthContext";
 export default function App() {
   const [loaded, setLoaded] = useState(false);
   const [client, setClient] = useState(null);
@@ -41,9 +43,9 @@ export default function App() {
       });
 
       //check islogin
-      const isLoggedIn = AsyncStorage.getItem("isLoggedIn");
-      console.log(isLoggedIn);
-      if (isLoggedIn === null || isLoggedIn === false) {
+      const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+      console.log("isLoggedIn", isLoggedIn);
+      if (isLoggedIn === "null" || isLoggedIn === "false") {
         setIsLoggedIn(false);
       } else {
         setIsLoggedIn(true);
@@ -64,7 +66,9 @@ export default function App() {
   return loaded && client && isLoggedIn !== null ? (
     <ThemeProvider theme={Theme}>
       <ApolloProvider client={client}>
-        {isLoggedIn ? <Text>i'm in</Text> : <Text>I'm out</Text>}
+        <AuthProvider isLoggedIn={isLoggedIn}>
+          <NavContainer />
+        </AuthProvider>
       </ApolloProvider>
     </ThemeProvider>
   ) : (
