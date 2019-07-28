@@ -4,7 +4,7 @@ import {
 } from "react-navigation";
 import TakePhoto from "../screens/Photo/TakePhoto";
 import SelectPhoto from "../screens/Photo/SelectPhoto";
-// import Upload from "../screens/Photo/Upload";
+import UpLoad from "../screens/Photo/UpLoad";
 const PhotoTabs = createMaterialTopTabNavigator(
   {
     TakePhoto,
@@ -16,6 +16,6 @@ const PhotoTabs = createMaterialTopTabNavigator(
 );
 
 export default createStackNavigator({
-  PhotoTabs
-  //   Upload
+  PhotoTabs,
+  UpLoad
 });

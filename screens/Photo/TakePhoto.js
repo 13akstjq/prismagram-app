@@ -1,4 +1,5 @@
 import React from "react";
+import { TouchableOpacity } from "react-native";
 import styled from "styled-components";
 
 const View = styled.View`
@@ -9,10 +10,12 @@ const View = styled.View`
 
 const Text = styled.Text``;
 
-const TakePhoto = () => {
+const TakePhoto = ({ navigation: { navigate } }) => {
   return (
     <View>
-      <Text>TakePhoto</Text>
+      <TouchableOpacity onPress={() => navigate("UpLoad")}>
+        <Text>TakePhoto</Text>
+      </TouchableOpacity>
     </View>
   );
 };
