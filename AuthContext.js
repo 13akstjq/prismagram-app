@@ -1,7 +1,10 @@
 import React, { createContext, useState } from "react";
 import { AsyncStorage } from "react-native";
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 989668d4b7c91950336b26c08f8cb85bd8d2b619
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ isLoggedInProp, children }) => {
