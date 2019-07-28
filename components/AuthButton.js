@@ -18,7 +18,6 @@ const Text = styled.Text`
 `;
 
 const AuthButton = ({ text, onPress }) => {
-  console.log(onPress);
   return (
     <AuthContainer onPress={onPress}>
       <Button>
