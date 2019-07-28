@@ -12,7 +12,7 @@ const Text = styled.Text``;
 const Notifications = () => {
   return (
     <View>
-      <Text>Notifications</Text>
+      <Text>Notification</Text>
     </View>
   );
 };
