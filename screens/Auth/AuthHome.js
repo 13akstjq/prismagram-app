@@ -1,24 +1,40 @@
 import React from "react";
-import { TouchableOpacity } from "react-native";
 import styled from "styled-components";
-
+import constants from "../../constants";
+import AuthButton from "../../components/AuthButton";
 const View = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
 `;
 
-const Text = styled.Text``;
+const Logo = styled.Image`
+  width: ${constants.width};
+  margin-bottom: 10px;
+`;
+
+const Touchable = styled.TouchableOpacity``;
+
+const LoginButton = styled.View``;
+
+const LoginText = styled.Text`
+  color: ${props => props.theme.blueColor};
+`;
 
 const AuthHome = ({ navigation: { navigate } }) => {
+  console.log(constants.width);
   return (
     <View>
-      <TouchableOpacity onPress={() => navigate("Login")}>
-        <Text>sign in</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigate("Signup")}>
-        <Text>sign up</Text>
-      </TouchableOpacity>
+      <Logo resizeMode={"contain"} source={require("../../assets/logo.png")} />
+      <AuthButton
+        text={"Create New Account"}
+        onPress={() => navigate("Signup")}
+      />
+      <Touchable onPress={() => navigate("Login")}>
+        <LoginButton>
+          <LoginText>Log in</LoginText>
+        </LoginButton>
+      </Touchable>
     </View>
   );
 };
