@@ -20,7 +20,7 @@ const AuthInput = ({
   placeholder,
   keyboardType,
   returnKeyType = "done",
-  onEndEditing = () => null
+  onSubmitEditing = () => null
 }) => {
   return (
     <InputContainer>
@@ -30,7 +30,7 @@ const AuthInput = ({
         placeholder={placeholder}
         keyboardType={keyboardType}
         returnKeyType={returnKeyType}
-        onEndEditing={onEndEditing}
+        onSubmitEditing={onSubmitEditing}
       />
     </InputContainer>
   );

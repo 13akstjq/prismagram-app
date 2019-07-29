@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import constants from "../constants";
-
+import { ActivityIndicator } from "react-native";
 const AuthContainer = styled.TouchableOpacity``;
 
 const Button = styled.View`
@@ -17,11 +17,11 @@ const Text = styled.Text`
   text-align: center;
 `;
 
-const AuthButton = ({ text, onPress }) => {
+const AuthButton = ({ text, onPress, loading }) => {
   return (
-    <AuthContainer onPress={onPress}>
+    <AuthContainer disabled={loading} onPress={onPress}>
       <Button>
-        <Text>{text}</Text>
+        {loading ? <ActivityIndicator color={"white"} /> : <Text>{text}</Text>}
       </Button>
     </AuthContainer>
   );

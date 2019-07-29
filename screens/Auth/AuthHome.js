@@ -22,7 +22,6 @@ const LoginText = styled.Text`
 `;
 
 const AuthHome = ({ navigation: { navigate } }) => {
-  console.log(constants.width);
   return (
     <View>
       <Logo resizeMode={"contain"} source={require("../../assets/logo.png")} />
