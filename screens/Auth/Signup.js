@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
 import styled from "styled-components";
 import AuthInput from "../../components/AuthInput";
@@ -13,11 +13,12 @@ const View = styled.View`
   align-items: center;
 `;
 
-const Signup = () => {
+const Signup = ({ navigation }) => {
   const fnameInput = useInput("");
   const lnameInput = useInput("");
   const emailInput = useInput("");
   const usernameInput = useInput("");
+  const [loading, setLoading] = useState(false);
   const [createAccountMutation] = useMutation(CREATE_ACCOUNT, {
     variables: {
       firstName: fnameInput.value,
@@ -27,7 +28,8 @@ const Signup = () => {
     }
   });
 
-  const handleSubmit = async ({ navigation }) => {
+  const handleSubmit = async () => {
+    setLoading(true);
     const { value: firstname } = fnameInput;
     const { value: lastname } = lnameInput;
     const { value: email } = emailInput;
@@ -37,32 +39,29 @@ const Signup = () => {
     if (!emailRegex.test(email)) {
       // 이메일 유효하지 않음.
       Alert.alert("invalid email");
-    }
-    if (firstname === "") {
+    } else if (firstname === "") {
       Alert.alert("write your firstname");
-    }
-    if (lastname === "") {
+    } else if (lastname === "") {
       Alert.alert("write your lastname");
-    }
-    if (username === "") {
+    } else if (username === "") {
       Alert.alert("write your username");
-    }
-
-    try {
-      const {
-        data: { createAccount }
-      } = await createAccountMutation();
-      if (createAccount) {
-        Alert.alert("signup success", "login");
-      } else {
-        Alert.alrt("already taken");
+    } else {
+      try {
+        const {
+          data: { createAccount }
+        } = await createAccountMutation();
+        if (createAccount) {
+          Alert.alert("signup success", "login");
+          navigation.navigate("Login", { email });
+        }
+      } catch (error) {
+        Alert.alert("already taken", "login instead");
+        navigation.navigate("Login", { email });
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+      setLoading(false);
     }
-    Alert.alert("가입");
   };
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View>
@@ -87,7 +86,7 @@ const Signup = () => {
           placeholder={"username"}
           returnKeyType={"done"}
         />
-        <AuthButton text="Sign up" onPress={handleSubmit} />
+        <AuthButton text="Sign up" onPress={handleSubmit} loading={loading} />
       </View>
     </TouchableWithoutFeedback>
   );

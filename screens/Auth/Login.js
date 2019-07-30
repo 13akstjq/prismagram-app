@@ -13,8 +13,8 @@ const View = styled.View`
   align-items: center;
 `;
 
-export default ({ navigation: { navigate } }) => {
-  const emailValue = useInput("13akstjq@naver.com");
+export default ({ navigation }) => {
+  const emailValue = useInput(navigation.getParam("email", ""));
   const [loading, setLoading] = useState(false);
   const [requestSecretMutation] = useMutation(LOG_IN, {
     variables: {
@@ -40,11 +40,11 @@ export default ({ navigation: { navigate } }) => {
       if (requestSecret) {
         console.log("인증키 전송 성공");
         Alert.alert("Check your email");
-        navigate("Confirm", { email: value });
+        navigation.navigate("Confirm", { email: value });
       } else {
         console.log("인증키 전송 실패");
         Alert.alert("signUp");
-        navigate("Signup");
+        navigation.navigate("Signup");
       }
     } catch (error) {
       console.log(error);
