@@ -21,8 +21,6 @@ export default ({ navigation: { navigate } }) => {
       email: emailValue.value
     }
   });
-  console.log(useMutation);
-  console.log(requestSecretMutation);
   const { value } = emailValue;
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const handleSubmit = async () => {
@@ -42,11 +40,12 @@ export default ({ navigation: { navigate } }) => {
       if (requestSecret) {
         console.log("인증키 전송 성공");
         Alert.alert("Check your email");
+        navigate("Confirm", { email: value });
       } else {
         console.log("인증키 전송 실패");
         Alert.alert("signUp");
+        navigate("Signup");
       }
-      navigate("Confirm");
     } catch (error) {
       console.log(error);
       Alert.alert("Can't log in now");

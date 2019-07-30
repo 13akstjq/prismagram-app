@@ -44,7 +44,8 @@ export default function App() {
 
       //check islogin
       const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
-      if (isLoggedIn === "null" || isLoggedIn === "false") {
+      console.log("isLoggedIn", isLoggedIn);
+      if (isLoggedIn === null || isLoggedIn === "false") {
         setIsLoggedIn(false);
       } else {
         setIsLoggedIn(true);
@@ -65,7 +66,7 @@ export default function App() {
   return loaded && client && isLoggedIn !== null ? (
     <ApolloProvider client={client}>
       <ThemeProvider theme={Theme}>
-        <AuthProvider isLoggedIn={isLoggedIn}>
+        <AuthProvider isLoggedInProp={isLoggedIn}>
           <NavContainer />
         </AuthProvider>
       </ThemeProvider>
