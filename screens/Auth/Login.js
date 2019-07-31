@@ -13,6 +13,7 @@ const View = styled.View`
   align-items: center;
 `;
 
+
 export default ({ navigation }) => {
   const emailValue = useInput(navigation.getParam("email", ""));
   const [loading, setLoading] = useState(false);
