@@ -14,6 +14,8 @@
     "expo-asset": "^6.0.0",
     "font": "0.0.4",
     "graphql": "^14.4.2",
+    "graphql-tag": "^2.10.1",
+    "prop-types": "^15.7.2",
     "react": "16.8.3",
     "react-apollo-hooks": "^0.5.0",
     "react-dom": "^16.8.6",

@@ -5,10 +5,10 @@ import Login from "../screens/Auth/Login";
 import Confirm from "../screens/Auth/Confirm";
 const AuthNavigation = createStackNavigator(
   {
-    AuthHome,
-    Login,
     Signup,
-    Confirm
+    AuthHome,
+    Confirm,
+    Login
   },
   {
     headerMode: "none"
