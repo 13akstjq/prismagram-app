@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, Image, Platform } from "react-native";
 import {
   createBottomTabNavigator,
   createStackNavigator
@@ -9,30 +9,78 @@ import Search from "../screens/Search";
 import Notifications from "../screens/Notifications";
 import Profile from "../screens/Profile";
 import MessageLink from "../components/MessageLink";
-const stackFactory = (initial, title) =>
-  createStackNavigator({
+import constants from "../constants";
+import NavIcon from "../components/NavIcon";
+
+const stackFactory = initial => {
+  return createStackNavigator({
     initial: {
       screen: initial,
-      navigationOptions: () => ({
-        headerTitle: title,
+      navigationOptions: {
+        headerTitle: (
+          <Image
+            style={{ width: constants.width / 3.7 }}
+            resizeMode="contain"
+            source={require("../assets/logo.png")}
+          />
+        ),
         headerRight: <MessageLink />
-      })
+      }
     }
   });
+};
 
-const TabNavigation = createBottomTabNavigator({
-  Home: stackFactory(Home, "Home"),
-  Search: stackFactory(Search, "Search"),
-  Add: {
-    screen: View,
-    navigationOptions: {
-      tabBarOnPress: ({ navigation }) => {
-        navigation.navigate("PhotoNavigation");
+const TabNavigation = createBottomTabNavigator(
+  {
+    Home: {
+      screen: stackFactory(Home),
+      navigationOptions: {
+        tabBarIcon: (
+          <NavIcon name={Platform.OS === "ios" ? "ios-home" : "md-home"} />
+        )
+      }
+    },
+    Search: {
+      screen: stackFactory(Search),
+      navigationOptions: {
+        tabBarIcon: (
+          <NavIcon name={Platform.OS === "ios" ? "ios-search" : "md-search"} />
+        )
+      }
+    },
+    Add: {
+      screen: View,
+      navigationOptions: {
+        tabBarOnPress: ({ navigation }) => {
+          navigation.navigate("PhotoNavigation");
+        },
+        tabBarIcon: (
+          <NavIcon name={Platform.OS === "ios" ? "ios-add" : "md-add"} />
+        )
+      }
+    },
+    Notifications: {
+      screen: stackFactory(Notifications),
+      navigationOptions: {
+        tabBarIcon: (
+          <NavIcon name={Platform.OS === "ios" ? "ios-heart" : "md-heart"} />
+        )
+      }
+    },
+    Profile: {
+      screen: stackFactory(Profile),
+      navigationOptions: {
+        tabBarIcon: (
+          <NavIcon name={Platform.OS === "ios" ? "ios-person" : "md-person"} />
+        )
       }
     }
   },
-  Notifications: stackFactory(Notifications, "Notifications"),
-  Profile: stackFactory(Profile, "Profile")
-});
+  {
+    tabBarOptions: {
+      showLabel: false
+    }
+  }
+);
 
 export default TabNavigation;
