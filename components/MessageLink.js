@@ -5,7 +5,9 @@ import { Platform } from "react-native";
 import NavIcon from "./NavIcon";
 const Container = styled.TouchableOpacity``;
 
-const View = styled.View``;
+const View = styled.View`
+  margin-right: 20px;
+`;
 
 const Text = styled.Text``;
 

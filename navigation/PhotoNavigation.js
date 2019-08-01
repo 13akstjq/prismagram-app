@@ -5,6 +5,7 @@ import {
 import TakePhoto from "../screens/Photo/TakePhoto";
 import SelectPhoto from "../screens/Photo/SelectPhoto";
 import UpLoad from "../screens/Photo/UpLoad";
+import { stackConfig } from "./config";
 const PhotoTabs = createMaterialTopTabNavigator(
   {
     TakePhoto,
@@ -15,7 +16,16 @@ const PhotoTabs = createMaterialTopTabNavigator(
   }
 );
 
-export default createStackNavigator({
-  PhotoTabs,
-  UpLoad
-});
+export default createStackNavigator(
+  {
+    PhotoTabs,
+    UpLoad
+  },
+  {
+    defaultNavigationOptions: {
+      headerStyle: {
+        ...stackConfig
+      }
+    }
+  }
+);
