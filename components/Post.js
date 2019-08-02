@@ -2,7 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import constants from "../constants";
-
+import Swiper from "react-native-swiper";
+import { Ionicons } from "@expo/vector-icons";
+import { Platform } from "@unimodules/core";
+import Comment from "./Comment";
 const Container = styled.View`
   width: ${constants.width};
   margin-bottom: 20px;
@@ -26,19 +29,37 @@ const Avatar = styled.Image`
 
 const Bold = styled.Text``;
 
-const Photos = styled.View``;
+const PhotoList = styled.View`
+  height: ${constants.height / 2};
+`;
+
+const Photo = styled.Image`
+  width: ${constants.width};
+  height: ${constants.height / 2};
+`;
+
+const ContentContainer = styled.View`
+  margin: 0 10px;
+`;
+
+const Touchable = styled.TouchableOpacity`
+  margin-right: 10px;
+`;
 
 const Content = styled.View``;
 
 const Image = styled.Image``;
 
-const Meta = styled.View``;
+const IconContainer = styled.View`
+  padding: 6px;
+  padding-left: 0;
+  flex: 1;
+  flex-direction: row;
+`;
 
 const LikeCount = styled.Text``;
 
 const CommentList = styled.View``;
-
-const Comment = styled.Text;
 
 const Text = styled.Text``;
 const Post = ({
@@ -53,12 +74,53 @@ const Post = ({
 }) => {
   return (
     <Container>
-      <Container>
-        <Header>
-          <Avatar source={{ uri: `${user.avatar}` }} />
-          <Bold>{user.username}</Bold>
-        </Header>
-      </Container>
+      <Header>
+        <Avatar source={{ uri: user.avatar }} />
+        <Bold>{user.username}</Bold>
+      </Header>
+      <Swiper
+        style={{ height: constants.height / 2 }}
+        showsButtons={false}
+        showsPagination={true}
+        paginationStyle={{ bottom: -20 }}
+      >
+        {files.map(photo => (
+          <Photo key={photo.id} source={{ uri: photo.url }} />
+        ))}
+      </Swiper>
+
+      <ContentContainer>
+        <IconContainer>
+          <Touchable>
+            <Ionicons
+              name={Platform === "ios" ? "ios-heart-empty" : "md-heart-empty"}
+              size={28}
+            />
+          </Touchable>
+          <Touchable>
+            <Ionicons
+              name={Platform === "ios" ? "ios-chatbubbles" : "md-chatbubbles"}
+              size={28}
+            />
+          </Touchable>
+          <Touchable>
+            <Ionicons
+              name={Platform === "ios" ? "ios-paper-plane" : "md-paper-plane"}
+              size={28}
+            />
+          </Touchable>
+        </IconContainer>
+        <LikeCount>좋아요 {likeCount}개</LikeCount>
+        <CommentList>
+          {comments.map(comment => (
+            <Comment
+              key={comment.id}
+              text={comment.text}
+              writer={comment.user.username}
+            />
+          ))}
+        </CommentList>
+      </ContentContainer>
     </Container>
   );
 };
