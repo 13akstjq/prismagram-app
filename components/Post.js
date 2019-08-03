@@ -10,6 +10,8 @@ import constants from "../constants";
 import Theme from "../Styles/Theme";
 import { useMutation } from "react-apollo-hooks";
 
+// Styled-Components
+
 const Container = styled.View`
   width: ${constants.width};
   margin-bottom: 20px;
@@ -23,6 +25,8 @@ const Header = styled.View`
   align-items: center;
   padding: 10px;
 `;
+
+const HeaderInfo = styled.View``;
 
 const Avatar = styled.Image`
   height: 40px;
@@ -71,6 +75,9 @@ const Caption = styled.Text`
   margin-bottom: 5px;
 `;
 
+const Text = styled.Text``;
+
+// Mutaion & Query
 const TOGGLE_LIKE = gql`
   mutation toggleLike($postId: String!) {
     toggleLike(postId: $postId)
@@ -112,8 +119,10 @@ const Post = ({
     <Container>
       <Header>
         <Avatar source={{ uri: user.avatar }} />
-        <Bold>{user.username}</Bold>
-        <Bold>{location}</Bold>
+        <HeaderInfo>
+          <Bold>{user.username}</Bold>
+          <Text>{location}</Text>
+        </HeaderInfo>
       </Header>
       <Swiper
         style={{ height: constants.height / 2 }}
