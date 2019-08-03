@@ -13,11 +13,29 @@ import constants from "../constants";
 import NavIcon from "../components/NavIcon";
 import { stackConfig } from "./config";
 
-const stackFactory = initial => {
-  return createStackNavigator({
-    initial: {
-      screen: initial,
-      navigationOptions: {
+const stackFactory = (initial, navConfig, stackNavConfig) => {
+  return createStackNavigator(
+    {
+      initial: {
+        screen: initial,
+        navigationOptions: {
+          ...navConfig,
+          headerStyle: {
+            ...stackConfig
+          }
+        }
+      }
+    },
+    {
+      ...stackNavConfig
+    }
+  );
+};
+
+const TabNavigation = createBottomTabNavigator(
+  {
+    Home: {
+      screen: stackFactory(Home, {
         headerTitle: () => (
           <Image
             style={{ width: constants.width / 3.7 }}
@@ -25,19 +43,8 @@ const stackFactory = initial => {
             source={require("../assets/logo.png")}
           />
         ),
-        headerRight: <MessageLink />,
-        headerStyle: {
-          ...stackConfig
-        }
-      }
-    }
-  });
-};
-
-const TabNavigation = createBottomTabNavigator(
-  {
-    Home: {
-      screen: stackFactory(Home),
+        headerRight: <MessageLink />
+      }),
       navigationOptions: {
         tabBarIcon: ({ focused }) => (
           <NavIcon
@@ -48,7 +55,7 @@ const TabNavigation = createBottomTabNavigator(
       }
     },
     Search: {
-      screen: stackFactory(Search),
+      screen: stackFactory(Search, null, { headerLayoutPreset: "center" }),
       navigationOptions: {
         tabBarIcon: ({ focused }) => (
           <NavIcon
@@ -73,7 +80,16 @@ const TabNavigation = createBottomTabNavigator(
       }
     },
     Notifications: {
-      screen: stackFactory(Notifications),
+      screen: stackFactory(Notifications, {
+        headerTitle: () => (
+          <Image
+            style={{ width: constants.width / 3.7 }}
+            resizeMode="contain"
+            source={require("../assets/logo.png")}
+          />
+        ),
+        headerRight: <MessageLink />
+      }),
       navigationOptions: {
         tabBarIcon: ({ focused }) => (
           <NavIcon
@@ -92,14 +108,24 @@ const TabNavigation = createBottomTabNavigator(
       }
     },
     Profile: {
-      screen: stackFactory(Profile),
+      screen: stackFactory(Profile, {
+        headerTitle: () => (
+          <Image
+            style={{ width: constants.width / 3.7 }}
+            resizeMode="contain"
+            source={require("../assets/logo.png")}
+          />
+        ),
+        headerRight: <MessageLink />
+      }),
       navigationOptions: {
         tabBarIcon: ({ focused }) => (
           <NavIcon
             focused={focused}
             name={Platform.OS === "ios" ? "ios-person" : "md-person"}
           />
-        )
+        ),
+        headerRight: <MessageLink />
       }
     }
   },
@@ -109,7 +135,8 @@ const TabNavigation = createBottomTabNavigator(
       style: {
         backgroundColor: "#FAFAFA"
       }
-    }
+    },
+    initialRouteName: "Search"
   }
 );
 
