@@ -9,7 +9,7 @@ import Comment from "./Comment";
 import constants from "../constants";
 import Theme from "../Styles/Theme";
 import { useMutation } from "react-apollo-hooks";
-
+import { withNavigation } from "react-navigation";
 // Styled-Components
 
 const Container = styled.View`
@@ -92,7 +92,8 @@ const Post = ({
   isLiked: isLikedProp,
   user,
   files,
-  comments
+  comments,
+  navigation
 }) => {
   const [isLiked, setIsLiked] = useState(isLikedProp);
   const [likeCount, setLikeCount] = useState(likeCountProp);
@@ -101,6 +102,16 @@ const Post = ({
       postId: id
     }
   });
+  console.log(
+    id,
+    location,
+    caption,
+    likeCountProp,
+    isLiked,
+    user,
+    files,
+    comments
+  );
   const handleLike = async () => {
     try {
       if (isLiked === false) {
@@ -118,9 +129,21 @@ const Post = ({
   return (
     <Container>
       <Header>
-        <Avatar source={{ uri: user.avatar }} />
+        <Touchable
+          onPress={() =>
+            navigation.navigate("UserDetail", { username: user.username })
+          }
+        >
+          <Avatar source={{ uri: user.avatar }} />
+        </Touchable>
         <HeaderInfo>
-          <Bold>{user.username}</Bold>
+          <Touchable
+            onPress={() =>
+              navigation.navigate("UserDetail", { username: user.username })
+            }
+          >
+            <Bold>{user.username}</Bold>
+          </Touchable>
           <Text>{location}</Text>
         </HeaderInfo>
       </Header>
@@ -213,4 +236,4 @@ Post.propTypes = {
   ).isRequired
 };
 
-export default Post;
+export default withNavigation(Post);
