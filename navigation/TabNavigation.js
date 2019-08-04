@@ -9,8 +9,10 @@ import Search from "../screens/Search";
 import Notifications from "../screens/Notifications";
 import Profile from "../screens/Profile";
 import MessageLink from "../components/MessageLink";
+import Detail from "../screens/Detail";
 import constants from "../constants";
 import NavIcon from "../components/NavIcon";
+import UserDetail from "../components/UserDetail";
 import { stackConfig } from "./config";
 
 const stackFactory = (initial, navConfig, stackNavConfig) => {
@@ -24,7 +26,9 @@ const stackFactory = (initial, navConfig, stackNavConfig) => {
             ...stackConfig
           }
         }
-      }
+      },
+      Detail,
+      UserDetail
     },
     {
       ...stackNavConfig
@@ -136,7 +140,7 @@ const TabNavigation = createBottomTabNavigator(
         backgroundColor: "#FAFAFA"
       }
     },
-    initialRouteName: "Search"
+    initialRouteName: "Profile"
   }
 );
 
