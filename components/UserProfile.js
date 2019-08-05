@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { ScrollView } from "react-native";
 import constants from "../constants";
@@ -6,6 +6,7 @@ import Theme from "../Styles/Theme";
 import { Ionicons } from "@expo/vector-icons";
 import { Platform } from "@unimodules/core";
 import SquarePhoto from "./SquarePhoto";
+import Post from "./Post";
 
 // Header
 const Header = styled.View`
@@ -47,8 +48,6 @@ const MenuItem = styled.View`
   flex: 1;
   align-items: center;
   width: ${constants.width / 2};
-  border-bottom-width: 1px;
-  border-bottom-color: ${Theme.blackColor};
 `;
 const MenuList = styled.View`
   flex-direction: row;
@@ -77,6 +76,8 @@ export default ({
   followingCount,
   followerCount
 }) => {
+  const [isGrid, setIsGrid] = useState(true);
+  const toggleIsGrid = () => setIsGrid(p => !p);
   return (
     <ScrollView>
       <Header>
@@ -105,24 +106,34 @@ export default ({
       </Touchable>
 
       <MenuList>
-        <MenuItem>
-          <Ionicons
-            name={Platform === "ios" ? "ios-grid" : "md-grid"}
-            size={28}
-          />
-        </MenuItem>
-        <MenuItem>
-          <Ionicons
-            name={Platform === "ios" ? "ios-list" : "md-list"}
-            size={28}
-          />
-        </MenuItem>
+        <Touchable onPress={toggleIsGrid}>
+          <MenuItem>
+            <Ionicons
+              color={isGrid ? Theme.blackColor : Theme.lightGreyColor}
+              name={Platform === "ios" ? "ios-grid" : "md-grid"}
+              size={28}
+            />
+          </MenuItem>
+        </Touchable>
+        <Touchable onPress={toggleIsGrid}>
+          <MenuItem>
+            <Ionicons
+              color={!isGrid ? Theme.blackColor : Theme.lightGreyColor}
+              name={Platform === "ios" ? "ios-list" : "md-list"}
+              size={28}
+            />
+          </MenuItem>
+        </Touchable>
       </MenuList>
 
       <PostList>
-        {posts.map(post => (
-          <SquarePhoto key={post.id} id={post.id} url={post.files[0].url} />
-        ))}
+        {posts.map(post =>
+          isGrid ? (
+            <SquarePhoto key={post.id} id={post.id} url={post.files[0].url} />
+          ) : (
+            <Post key={post.id} {...post} />
+          )
+        )}
       </PostList>
     </ScrollView>
   );

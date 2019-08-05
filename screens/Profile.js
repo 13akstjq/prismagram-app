@@ -4,6 +4,7 @@ import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
 import Loader from "../components/Loader";
 import UserProfile from "../components/UserProfile";
+import { POST_FRAGMENT } from "../fragment";
 
 const View = styled.View``;
 
@@ -20,11 +21,7 @@ const ME = gql`
         avatar
         bio
         posts {
-          id
-          files {
-            id
-            url
-          }
+          ...PostParts
         }
         postCount
         followingCount
@@ -32,6 +29,7 @@ const ME = gql`
       }
     }
   }
+  ${POST_FRAGMENT}
 `;
 
 const Profile = () => {

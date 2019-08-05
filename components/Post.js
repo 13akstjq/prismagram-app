@@ -102,16 +102,7 @@ const Post = ({
       postId: id
     }
   });
-  console.log(
-    id,
-    location,
-    caption,
-    likeCountProp,
-    isLiked,
-    user,
-    files,
-    comments
-  );
+
   const handleLike = async () => {
     try {
       if (isLiked === false) {
