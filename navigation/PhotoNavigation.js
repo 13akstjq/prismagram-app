@@ -9,13 +9,17 @@ import { stackConfig } from "./config";
 import Theme from "../Styles/Theme";
 const PhotoTabs = createMaterialTopTabNavigator(
   {
-    TakePhoto: {
+    Take: {
       screen: TakePhoto,
-      tabBarLabel: "Take"
+      navigationOptions: {
+        tabBarLabel: "Take"
+      }
     },
-    SelectPhoto: {
+    Select: {
       screen: SelectPhoto,
-      tabBarLabel: "Select"
+      navigationOptions: {
+        tabBarLabel: "Select"
+      }
     }
   },
   {
@@ -27,7 +31,9 @@ const PhotoTabs = createMaterialTopTabNavigator(
       indicatorStyle: {
         backgroundColor: Theme.blackColor
       },
-      tabStyle: {},
+      labelStyle: {
+        fontWeight: "600"
+      },
       style: {
         marginBottom: 10,
         backgroundColor: Theme.lightGreyColor
