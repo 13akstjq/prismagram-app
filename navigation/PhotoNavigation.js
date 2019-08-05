@@ -6,13 +6,33 @@ import TakePhoto from "../screens/Photo/TakePhoto";
 import SelectPhoto from "../screens/Photo/SelectPhoto";
 import UpLoad from "../screens/Photo/UpLoad";
 import { stackConfig } from "./config";
+import Theme from "../Styles/Theme";
 const PhotoTabs = createMaterialTopTabNavigator(
   {
-    TakePhoto,
-    SelectPhoto
+    TakePhoto: {
+      screen: TakePhoto,
+      tabBarLabel: "Take"
+    },
+    SelectPhoto: {
+      screen: SelectPhoto,
+      tabBarLabel: "Select"
+    }
   },
   {
-    tabBarPosition: "bottom"
+    tabBarPosition: "bottom",
+    tabBarOptions: {
+      backgroundColor: Theme.lightGreyColor,
+      activeTintColor: Theme.blackColor,
+      inactiveTintColor: Theme.darkGreyColor,
+      indicatorStyle: {
+        backgroundColor: Theme.blackColor
+      },
+      tabStyle: {},
+      style: {
+        marginBottom: 10,
+        backgroundColor: Theme.lightGreyColor
+      }
+    }
   }
 );
 
@@ -22,6 +42,7 @@ export default createStackNavigator(
     UpLoad
   },
   {
+    headerMode: "none",
     defaultNavigationOptions: {
       headerStyle: {
         ...stackConfig
