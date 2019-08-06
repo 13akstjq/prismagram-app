@@ -21,7 +21,6 @@ const SelectPhoto = () => {
       const [firstPhoto] = assets;
       setSelected(firstPhoto);
       setAllPhotos(assets);
-      console.log(assets);
     } catch (error) {
       console.log(error);
     } finally {
