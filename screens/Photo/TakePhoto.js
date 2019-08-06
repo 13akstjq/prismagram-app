@@ -1,23 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { TouchableOpacity } from "react-native";
 import styled from "styled-components";
 import * as Permissions from "expo-permissions";
+import * as MediaLibrary from "expo-media-library";
 import { Camera } from "expo-camera";
 import Loader from "../../components/Loader";
 import constants from "../../constants";
 import { Ionicons } from "@expo/vector-icons";
 import { Platform } from "@unimodules/core";
+import Theme from "../../Styles/Theme";
 
 const View = styled.View`
   flex: 1;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Text = styled.Text``;
 
+const Shot = styled.TouchableOpacity`
+  height: 80px;
+  width: 80px;
+  border-radius: 40px;
+  border: 10px solid ${Theme.lightGreyColor};
+  align-self: center;
+`;
+
 const TakePhoto = ({ navigation: { navigate } }) => {
+  const cameraRef = useRef();
   const [hasAllow, setHasAllow] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [cameraType, setCameraType] = useState(Camera.Constants.Type);
+  const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
+  const [canTakePhoto, setCanTakePhoto] = useState(true);
   //카메라 권한 요청 함수
   const requestPermission = async () => {
     try {
@@ -33,8 +47,25 @@ const TakePhoto = ({ navigation: { navigate } }) => {
     }
   };
 
-  const toggleCameraType = () => {};
-
+  const toggleCameraType = () => {
+    if (cameraType === Camera.Constants.Type.front) {
+      setCameraType(Camera.Constants.Type.back);
+    } else {
+      setCameraType(Camera.Constants.Type.front);
+    }
+  };
+  const takePhoto = async () => {
+    try {
+      setCanTakePhoto(false);
+      const { uri } = await cameraRef.current.takePictureAsync({
+        quality: 1
+      });
+      const asset = await MediaLibrary.createAssetAsync(uri);
+      navigate("UpLoad", { photo: asset });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     requestPermission();
   }, []);
@@ -44,22 +75,33 @@ const TakePhoto = ({ navigation: { navigate } }) => {
       {loading ? (
         <Loader />
       ) : hasAllow ? (
-        <Camera
-          style={{ width: constants.width, height: constants.height / 1.5 }}
-        >
-          <TouchableOpacity>
-            <Ionicons
-              name={
-                Platform.OS === "ios"
-                  ? "ios-reverse-camera"
-                  : "md-reverse-camera"
-              }
-              color="white"
-              size={28}
-              style={{}}
-            />
-          </TouchableOpacity>
-        </Camera>
+        <>
+          <Camera
+            ref={cameraRef}
+            style={{
+              width: constants.width,
+              height: constants.height / 2,
+              justifyContent: "flex-end"
+            }}
+            type={cameraType}
+          >
+            <TouchableOpacity onPress={toggleCameraType}>
+              <Ionicons
+                name={
+                  Platform.OS === "ios"
+                    ? "ios-reverse-camera"
+                    : "md-reverse-camera"
+                }
+                color="white"
+                size={28}
+                style={{ margin: 10 }}
+              />
+            </TouchableOpacity>
+          </Camera>
+          <View>
+            <Shot onPress={takePhoto} disabled={!canTakePhoto} />
+          </View>
+        </>
       ) : null}
     </View>
   );

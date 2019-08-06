@@ -5,11 +5,22 @@ import * as MediaLibrary from "expo-media-library";
 import { TouchableOpacity, Image, ScrollView } from "react-native";
 import Loader from "../../components/Loader";
 import constants from "../../constants";
+import Theme from "../../Styles/Theme";
 const View = styled.View``;
 
 const Text = styled.Text``;
 
-const SelectPhoto = () => {
+const SelectBtn = styled.TouchableOpacity`
+  background-color: ${Theme.lightGreyColor};
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  right: 10px;
+  padding: 6px 15px;
+  border-radius: 4px;
+`;
+
+const SelectPhoto = ({ navigation }) => {
   const [hasAllow, setHasAllow] = useState(false);
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -33,6 +44,7 @@ const SelectPhoto = () => {
     try {
       setLoading(true);
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      console.log(status);
       if (status === "granted") {
         setHasAllow(true);
         getPhotos();
@@ -40,8 +52,6 @@ const SelectPhoto = () => {
     } catch (error) {
       console.log(error);
       setHasAllow(false);
-    } finally {
-      //여기에서 loading false하면 안됨.
     }
   };
 
@@ -60,11 +70,15 @@ const SelectPhoto = () => {
         <Loader />
       ) : hasAllow ? (
         <>
+          <SelectBtn
+            onPress={() => navigation.navigate("UpLoad", { photo: selected })}
+          >
+            <Text>선택</Text>
+          </SelectBtn>
           <Image
             style={{
               width: constants.width,
-              height: constants.height / 2,
-              resizeMode: "contain"
+              height: constants.height / 2
             }}
             source={{ uri: selected.uri }}
           />
@@ -78,7 +92,6 @@ const SelectPhoto = () => {
                   style={{
                     width: constants.width / 3,
                     height: constants.width / 3,
-                    resizeMode: "contain",
                     opacity: selected === photo ? 0.4 : 1
                   }}
                   source={{ uri: photo.uri }}

@@ -9,10 +9,12 @@ const View = styled.View`
 
 const Text = styled.Text``;
 
-const UpLoad = () => {
+const UpLoad = ({ navigation }) => {
+  console.log(navigation.getParam("photo"));
   return (
     <View>
-      <Text>UpLoad</Text>
+      <Text />
+      <Text>{navigation.getParam("photo").uri}</Text>
     </View>
   );
 };
