@@ -11,6 +11,7 @@ const PhotoTabs = createMaterialTopTabNavigator(
   {
     Take: {
       screen: TakePhoto,
+
       navigationOptions: {
         tabBarLabel: "Take"
       }
@@ -44,15 +45,25 @@ const PhotoTabs = createMaterialTopTabNavigator(
 
 export default createStackNavigator(
   {
-    PhotoTabs,
-    UpLoad
+    PhotoTabs: {
+      screen: PhotoTabs,
+      navigationOptions: {
+        title: "Choose Photo"
+      }
+    },
+    UpLoad: {
+      screen: UpLoad,
+      navigationOptions: {
+        title: "UpLoad Photo"
+      }
+    }
   },
   {
-    headerMode: "none",
     defaultNavigationOptions: {
       headerStyle: {
         ...stackConfig
-      }
+      },
+      headerTintColor: Theme.darkGreyColor
     }
   }
 );

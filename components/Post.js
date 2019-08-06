@@ -169,13 +169,17 @@ const Post = ({
           </Touchable>
           <Touchable>
             <Ionicons
-              name={Platform === "ios" ? "ios-chatbubbles" : "md-chatbubbles"}
+              name={
+                Platform.OS === "ios" ? "ios-chatbubbles" : "md-chatbubbles"
+              }
               size={28}
             />
           </Touchable>
           <Touchable>
             <Ionicons
-              name={Platform === "ios" ? "ios-paper-plane" : "md-paper-plane"}
+              name={
+                Platform.OS === "ios" ? "ios-paper-plane" : "md-paper-plane"
+              }
               size={28}
             />
           </Touchable>
