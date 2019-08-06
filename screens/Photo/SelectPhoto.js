@@ -3,8 +3,8 @@ import styled from "styled-components";
 import * as Permissions from "expo-permissions";
 import * as MediaLibrary from "expo-media-library";
 import { TouchableOpacity, Image, ScrollView } from "react-native";
-import constants from "../../constants";
 import Loader from "../../components/Loader";
+import constants from "../../constants";
 const View = styled.View``;
 
 const Text = styled.Text``;
