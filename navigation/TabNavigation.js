@@ -140,7 +140,7 @@ const TabNavigation = createBottomTabNavigator(
         backgroundColor: "#FAFAFA"
       }
     },
-    initialRouteName: "Profile"
+    initialRouteName: "Add"
   }
 );
 

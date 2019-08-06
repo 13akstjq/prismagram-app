@@ -155,7 +155,7 @@ const Post = ({
             <Ionicons
               color={isLiked ? Theme.redColor : Theme.blackColor}
               name={
-                Platform === "ios"
+                Platform.Os === "ios"
                   ? isLiked
                     ? "ios-heart"
                     : "ios-heart-empty"

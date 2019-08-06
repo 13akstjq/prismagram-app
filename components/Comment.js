@@ -29,7 +29,7 @@ export default ({ writer, text }) => (
       <Text>{text}</Text>
     </Comment>
     <Ionicons
-      name={Platform === "ios" ? "ios-heart-empty" : "md-heart-empty"}
+      name={Platform.OS === "ios" ? "ios-heart-empty" : "md-heart-empty"}
     />
   </Container>
 );

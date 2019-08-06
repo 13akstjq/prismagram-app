@@ -110,7 +110,7 @@ export default ({
           <MenuItem>
             <Ionicons
               color={isGrid ? Theme.blackColor : Theme.lightGreyColor}
-              name={Platform === "ios" ? "ios-grid" : "md-grid"}
+              name={Platform.OS === "ios" ? "ios-grid" : "md-grid"}
               size={28}
             />
           </MenuItem>
@@ -119,7 +119,7 @@ export default ({
           <MenuItem>
             <Ionicons
               color={!isGrid ? Theme.blackColor : Theme.lightGreyColor}
-              name={Platform === "ios" ? "ios-list" : "md-list"}
+              name={Platform.OS === "ios" ? "ios-list" : "md-list"}
               size={28}
             />
           </MenuItem>
