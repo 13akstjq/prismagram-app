@@ -44,7 +44,7 @@ const SelectPhoto = ({ navigation }) => {
     try {
       setLoading(true);
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      console.log(status);
+      // console.log(status);
       if (status === "granted") {
         setHasAllow(true);
         getPhotos();
