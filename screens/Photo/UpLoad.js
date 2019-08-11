@@ -1,10 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { TextInput, Image, Alert } from "react-native";
+import { TextInput, Image, Alert, ActivityIndicator } from "react-native";
 import Theme from "../../Styles/Theme";
 import constants from "../../constants";
 import useInput from "../../Hooks/useInput";
 import axios from "axios";
+import { gql } from "apollo-boost";
+import { useMutation } from "react-apollo-hooks";
+import { FEED_QUERY } from "../Home";
+
+const UPLOAD_POST = gql`
+  mutation upLoad($caption: String!, $location: String!, $files: [String!]!) {
+    upLoad(caption: $caption, location: $location, files: $files) {
+      id
+      caption
+      location
+    }
+  }
+`;
+
 const View = styled.View`
   align-items: flex-end;
 `;
@@ -19,40 +33,67 @@ const InputContainer = styled.View`
   flex: 1;
 `;
 
-const Button = styled.Text`
+const Button = styled.TouchableOpacity`
   background-color: ${Theme.blueColor};
   padding: 5px 10px;
   width: ${constants.width / 3};
-  color: white;
-  text-align: center;
   margin: 10px;
 `;
 
-const Text = styled.Text``;
+const Text = styled.Text`
+  text-align: center;
+  color: white;
+`;
 
 const Touchable = styled.TouchableOpacity``;
 const UpLoad = ({ navigation }) => {
+  const [loading, setLoading] = useState(false);
   // console.log(navigation.getParam("photo"));
   const captionInput = useInput("logo");
   const locationInput = useInput("green");
   const photo = navigation.getParam("photo");
-  const handleSubmit = () => {
+  const [uploadPost] = useMutation(UPLOAD_POST, {
+    refetchQueries: () => [{ query: FEED_QUERY }]
+  });
+
+  const handleSubmit = async () => {
     if (captionInput.value === "" || locationInput.value === "") {
-      Alert.alert("게시물 정보를 입력해주세요.");
+      Alert.alert("게시물 정보를 입력해주세요f.");
     } else {
-      const formData = new FormData();
-      formData.append("file", {
-        name: photo.filename,
-        type: "image/jpeg",
-        uri: photo.uri
-      });
-      console.log(photo.filename);
-      // axios.post("http://192.168.56.1:4000/api/upload", formData, {
-      //   header: {
-      //     "content-type": "multipart/form-data"
-      //   }
-      // });
-      axios.post("http://192.168.56.1:4000/api/upload", formData, null);
+      try {
+        setLoading(true);
+        const formData = new FormData();
+        formData.append("file", {
+          name: photo.filename,
+          type: "image/jpeg",
+          uri: photo.uri
+        });
+        const {
+          data: { location }
+        } = await axios.post("http://192.168.56.1:4000/api/upload", formData, {
+          header: {
+            "content-type": "multipart/form-data"
+          }
+        });
+
+        const {
+          data: { upLoad }
+        } = await uploadPost({
+          variables: {
+            caption: captionInput.value,
+            location: locationInput.value,
+            files: [location]
+          }
+        });
+        if (upLoad.id) {
+          navigation.navigate("TabNavigation");
+        }
+        console.log(upLoad);
+      } catch (error) {
+        Alert.alert("사진을 업로드할 수 없습니다.", "다시 시도하세요 ");
+      } finally {
+        setLoading(false);
+      }
     }
   };
   return (
@@ -83,9 +124,9 @@ const UpLoad = ({ navigation }) => {
           />
         </InputContainer>
       </Form>
-      <Touchable onPress={handleSubmit}>
-        <Button>업로드</Button>
-      </Touchable>
+      <Button onPress={handleSubmit}>
+        {loading ? <ActivityIndicator color="white" /> : <Text>업로드</Text>}
+      </Button>
     </View>
   );
 };
