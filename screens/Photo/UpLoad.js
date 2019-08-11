@@ -4,6 +4,7 @@ import { TextInput, Image, Alert } from "react-native";
 import Theme from "../../Styles/Theme";
 import constants from "../../constants";
 import useInput from "../../Hooks/useInput";
+import axios from "axios";
 const View = styled.View`
   align-items: flex-end;
 `;
@@ -31,13 +32,27 @@ const Text = styled.Text``;
 
 const Touchable = styled.TouchableOpacity``;
 const UpLoad = ({ navigation }) => {
-  console.log(navigation.getParam("photo"));
-  const captionInput = useInput("");
-  const locationInput = useInput("");
-
+  // console.log(navigation.getParam("photo"));
+  const captionInput = useInput("logo");
+  const locationInput = useInput("green");
+  const photo = navigation.getParam("photo");
   const handleSubmit = () => {
     if (captionInput.value === "" || locationInput.value === "") {
       Alert.alert("게시물 정보를 입력해주세요.");
+    } else {
+      const formData = new FormData();
+      formData.append("file", {
+        name: photo.filename,
+        type: "image/jpeg",
+        uri: photo.uri
+      });
+      console.log(photo.filename);
+      // axios.post("http://192.168.56.1:4000/api/upload", formData, {
+      //   header: {
+      //     "content-type": "multipart/form-data"
+      //   }
+      // });
+      axios.post("http://192.168.56.1:4000/api/upload", formData, null);
     }
   };
   return (
@@ -45,7 +60,7 @@ const UpLoad = ({ navigation }) => {
       <Form>
         <Image
           style={{ width: 100, height: 100 }}
-          source={{ uri: navigation.getParam("photo").uri }}
+          source={{ uri: photo.uri }}
         />
         <InputContainer>
           <TextInput
