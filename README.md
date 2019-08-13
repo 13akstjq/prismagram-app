@@ -1,7 +1,6 @@
 # prismagram-app
 
-## screens :   ㄱㄷㄴ됮ㅅ
-
+## screens :  
 - [x] Home
 - [x] Search
 - [x] Upload
