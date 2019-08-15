@@ -39,10 +39,6 @@ const Bold = styled.Text`
   font-weight: 600;
 `;
 
-const PhotoList = styled.View`
-  height: ${constants.height / 2};
-`;
-
 const Photo = styled.Image`
   width: ${constants.width};
   height: ${constants.height / 2};
@@ -55,19 +51,17 @@ const ContentContainer = styled.View`
 const Touchable = styled.TouchableOpacity`
   margin-right: 10px;
 `;
-
-const Content = styled.View``;
-
-const Image = styled.Image``;
-
+const CommentCount = styled.Text`
+  color: ${Theme.darkGreyColor};
+`;
 const IconContainer = styled.View`
   padding: 6px;
-  padding-left: 0;
+  padding-left: 10px;
   flex: 1;
   flex-direction: row;
 `;
 
-const LikeCount = styled.Text``;
+const LikeCount = styled.View``;
 
 const CommentList = styled.View``;
 
@@ -97,12 +91,14 @@ const Post = ({
 }) => {
   const [isLiked, setIsLiked] = useState(isLikedProp);
   const [likeCount, setLikeCount] = useState(likeCountProp);
+  const commentCount = comments.length;
+  const [isFold, setIsFold] = useState(true);
+  const toggleFold = p => setIsFold(!p);
   const [toggleLike] = useMutation(TOGGLE_LIKE, {
     variables: {
       postId: id
     }
   });
-
   const handleLike = async () => {
     try {
       if (isLiked === false) {
@@ -149,55 +145,76 @@ const Post = ({
         ))}
       </Swiper>
 
+      <IconContainer>
+        <Touchable>
+          <Ionicons
+            color={isLiked ? Theme.redColor : Theme.blackColor}
+            name={
+              Platform.Os === "ios"
+                ? isLiked
+                  ? "ios-heart"
+                  : "ios-heart-empty"
+                : isLiked
+                ? "md-heart"
+                : "md-heart-empty"
+            }
+            onPress={handleLike}
+            size={28}
+          />
+        </Touchable>
+        <Touchable>
+          <Ionicons
+            name={Platform.OS === "ios" ? "ios-chatbubbles" : "md-chatbubbles"}
+            size={28}
+          />
+        </Touchable>
+        <Touchable>
+          <Ionicons
+            name={Platform.OS === "ios" ? "ios-paper-plane" : "md-paper-plane"}
+            size={28}
+          />
+        </Touchable>
+      </IconContainer>
       <ContentContainer>
-        <IconContainer>
-          <Touchable>
-            <Ionicons
-              color={isLiked ? Theme.redColor : Theme.blackColor}
-              name={
-                Platform.Os === "ios"
-                  ? isLiked
-                    ? "ios-heart"
-                    : "ios-heart-empty"
-                  : isLiked
-                  ? "md-heart"
-                  : "md-heart-empty"
-              }
-              onPress={handleLike}
-              size={28}
-            />
-          </Touchable>
-          <Touchable>
-            <Ionicons
-              name={
-                Platform.OS === "ios" ? "ios-chatbubbles" : "md-chatbubbles"
-              }
-              size={28}
-            />
-          </Touchable>
-          <Touchable>
-            <Ionicons
-              name={
-                Platform.OS === "ios" ? "ios-paper-plane" : "md-paper-plane"
-              }
-              size={28}
-            />
-          </Touchable>
-        </IconContainer>
-        <LikeCount>좋아요 {likeCount}개</LikeCount>
+        <LikeCount>
+          <Text>좋아요 {likeCount}개</Text>
+        </LikeCount>
 
         <Caption>
           <Bold>{user.username}</Bold> {caption}
         </Caption>
-        <CommentList>
-          {comments.map(comment => (
-            <Comment
-              key={comment.id}
-              text={comment.text}
-              writer={comment.user.username}
-            />
+        {comments.length > 2 &&
+          (isFold ? (
+            <Touchable onPress={() => toggleFold(isFold)}>
+              <CommentCount>댓글 {comments.length}개 모두 보기</CommentCount>
+            </Touchable>
+          ) : (
+            <Touchable onPress={() => toggleFold(isFold)}>
+              <CommentCount>댓글 접기</CommentCount>
+            </Touchable>
           ))}
-        </CommentList>
+
+        {isFold ? (
+          <CommentList>
+            {comments.slice(0, 2).map(comment => (
+              <Comment
+                key={comment.id}
+                text={comment.text}
+                writer={comment.user.username}
+              />
+            ))}
+          </CommentList>
+        ) : (
+          <CommentList>
+            {comments.map(comment => (
+              <Comment
+                key={comment.id}
+                text={comment.text}
+                writer={comment.user.username}
+              />
+            ))}
+          </CommentList>
+        )}
       </ContentContainer>
     </Container>
   );

@@ -10,6 +10,9 @@ const View = styled.View``;
 
 const Text = styled.Text``;
 
+const PhotoList = styled.View`
+  width: ${constants.width};
+`;
 const SelectBtn = styled.TouchableOpacity`
   background-color: ${Theme.lightGreyColor};
   position: absolute;
@@ -30,6 +33,7 @@ const SelectPhoto = ({ navigation }) => {
     try {
       const { assets } = await MediaLibrary.getAssetsAsync();
       const [firstPhoto] = assets;
+      console.log(assets);
       setSelected(firstPhoto);
       setAllPhotos(assets);
     } catch (error) {
@@ -82,7 +86,13 @@ const SelectPhoto = ({ navigation }) => {
             }}
             source={{ uri: selected.uri }}
           />
-          <ScrollView contentContainerStyle={{ flexDirection: "row" }}>
+          <ScrollView
+            contentContainerStyle={{
+              flexDirection: "row",
+              flexWrap: "wrap"
+              // width: constants.width
+            }}
+          >
             {allPhotos.map(photo => (
               <TouchableOpacity
                 key={photo.id}

@@ -7,12 +7,17 @@ import { Ionicons } from "@expo/vector-icons";
 import { Platform } from "@unimodules/core";
 import SquarePhoto from "./SquarePhoto";
 import Post from "./Post";
+import { useLogOut } from "../AuthContext";
 
 // Header
 const Header = styled.View`
   flex: 1;
   flex-direction: row;
   margin: 10px;
+`;
+const EditAvatar = styled.Image`
+  width: 25px;
+  height: 25px;
 `;
 const AvatarContainer = styled.View`
   align-content: center;
@@ -43,7 +48,15 @@ const EditProfileButton = styled.Text`
   border-radius: 6px;
   border: 1px solid ${Theme.lightGreyColor};
 `;
-
+const LogOutButton = styled.Text`
+  background-color: ${Theme.blueColor};
+  color: white;
+  padding: 5px;
+  margin: 5px;
+  text-align: center;
+  border-radius: 6px;
+  border: 1px solid ${Theme.lightGreyColor};
+`;
 const MenuItem = styled.View`
   flex: 1;
   align-items: center;
@@ -55,7 +68,11 @@ const MenuList = styled.View`
   border: 1px solid ${Theme.lightGreyColor};
 `;
 
-const PostList = styled.View``;
+const PostList = styled.View`
+  margin-top: 2px;
+  flex-wrap: wrap;
+  flex-direction: row;
+`;
 
 const Bold = styled.Text`
   font-weight: 600;
@@ -64,11 +81,17 @@ const Text = styled.Text``;
 
 const Touchable = styled.TouchableOpacity``;
 
+const EditAvatarContainer = styled.TouchableOpacity`
+  position: absolute;
+  left: ${constants.width / 4 - 20};
+  top: ${constants.width / 4 - 20};
+  width: 20px;
+  height: 20px;
+`;
 export default ({
   id,
   username,
-  firstName,
-  lastName,
+  fullName,
   avatar,
   bio,
   posts,
@@ -78,12 +101,21 @@ export default ({
 }) => {
   const [isGrid, setIsGrid] = useState(true);
   const toggleIsGrid = () => setIsGrid(p => !p);
+  const logOut = useLogOut();
   return (
     <ScrollView>
       <Header>
         <AvatarContainer>
           <Avatar source={{ uri: avatar }} />
-          <Bold>{username}</Bold>
+          <Bold>{fullName}</Bold>
+          <EditAvatarContainer>
+            <EditAvatar
+              source={{
+                uri:
+                  "https://i.ya-webdesign.com/images/blue-plus-sign-png-4.png"
+              }}
+            />
+          </EditAvatarContainer>
         </AvatarContainer>
         <InfoContainer>
           <InfoContent>
@@ -104,7 +136,9 @@ export default ({
       <Touchable>
         <EditProfileButton>프로필 수정</EditProfileButton>
       </Touchable>
-
+      <Touchable onPress={logOut}>
+        <LogOutButton>로그아웃</LogOutButton>
+      </Touchable>
       <MenuList>
         <Touchable onPress={toggleIsGrid}>
           <MenuItem>
