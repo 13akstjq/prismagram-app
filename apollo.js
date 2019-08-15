@@ -1,5 +1,5 @@
 const apolloClientOptions = {
-  uri: "http://192.168.56.1:4000"
+  uri: "https://manstagram-backend.herokuapp.com/"
 };
 
 export default apolloClientOptions;

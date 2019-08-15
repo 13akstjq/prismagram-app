@@ -70,11 +70,15 @@ const UpLoad = ({ navigation }) => {
         });
         const {
           data: { location }
-        } = await axios.post("http://192.168.56.1:4000/api/upload", formData, {
-          header: {
-            "content-type": "multipart/form-data"
+        } = await axios.post(
+          "https://manstagram-backend.herokuapp.com/api/upload",
+          formData,
+          {
+            header: {
+              "content-type": "multipart/form-data"
+            }
           }
-        });
+        );
 
         const {
           data: { upLoad }
@@ -90,6 +94,7 @@ const UpLoad = ({ navigation }) => {
         }
         console.log(upLoad);
       } catch (error) {
+        console.log(error);
         Alert.alert("사진을 업로드할 수 없습니다.", "다시 시도하세요 ");
       } finally {
         setLoading(false);

@@ -35,7 +35,6 @@ export default () => {
       setRefreshing(false);
     }
   };
-  console.log(loading, data);
   return (
     <View>
       {loading && <Loader />}
