@@ -34,7 +34,7 @@ const Profile = () => {
       username
     }
   });
-  console.log(data);
+  // console.log(data);
   const [refreshing, setRefreshing] = useState(false);
   const refresh = () => {
     try {

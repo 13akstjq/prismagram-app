@@ -13,6 +13,7 @@ import Detail from "../screens/Detail";
 import constants from "../constants";
 import NavIcon from "../components/NavIcon";
 import UserDetail from "../components/UserDetail";
+import SelectProfile from "../screens/Photo/SelectProfile";
 import { stackConfig } from "./config";
 
 const stackFactory = (initial, navConfig, stackNavConfig) => {
@@ -28,7 +29,8 @@ const stackFactory = (initial, navConfig, stackNavConfig) => {
         }
       },
       Detail,
-      UserDetail
+      UserDetail,
+      SelectProfile
     },
     {
       ...stackNavConfig
