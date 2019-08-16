@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { ScrollView } from "react-native";
 import constants from "../constants";
@@ -8,6 +8,8 @@ import { Platform } from "@unimodules/core";
 import SquarePhoto from "./SquarePhoto";
 import Post from "./Post";
 import { useLogOut } from "../AuthContext";
+import * as Permissions from "expo-permissions";
+import { withNavigation } from "react-navigation";
 
 // Header
 const Header = styled.View`
@@ -88,87 +90,99 @@ const EditAvatarContainer = styled.TouchableOpacity`
   width: 20px;
   height: 20px;
 `;
-export default ({
-  id,
-  username,
-  fullName,
-  avatar,
-  bio,
-  posts,
-  postCount,
-  followingCount,
-  followerCount
-}) => {
-  const [isGrid, setIsGrid] = useState(true);
-  const toggleIsGrid = () => setIsGrid(p => !p);
-  const logOut = useLogOut();
-  return (
-    <ScrollView>
-      <Header>
-        <AvatarContainer>
-          <Avatar source={{ uri: avatar }} />
-          <Bold>{fullName}</Bold>
-          <EditAvatarContainer>
-            <EditAvatar
-              source={{
-                uri:
-                  "https://i.ya-webdesign.com/images/blue-plus-sign-png-4.png"
-              }}
-            />
-          </EditAvatarContainer>
-        </AvatarContainer>
-        <InfoContainer>
-          <InfoContent>
-            <Bold>{postCount}</Bold>
-            <Text>게시물 </Text>
-          </InfoContent>
-          <InfoContent>
-            <Bold>{followerCount}</Bold>
-            <Text>팔로워 </Text>
-          </InfoContent>
-          <InfoContent>
-            <Bold>{followingCount}</Bold>
-            <Text>팔로잉 </Text>
-          </InfoContent>
-        </InfoContainer>
-      </Header>
+export default withNavigation(
+  ({
+    id,
+    username,
+    fullName,
+    avatar,
+    bio,
+    posts,
+    postCount,
+    followingCount,
+    followerCount,
+    navigation
+  }) => {
+    const [isGrid, setIsGrid] = useState(true);
+    const toggleIsGrid = () => setIsGrid(p => !p);
+    const logOut = useLogOut();
+    const requestPermission = async () => {
+      const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
+      console.log(status);
+      if (status === "granted") {
+      }
+    };
 
-      <Touchable>
-        <EditProfileButton>프로필 수정</EditProfileButton>
-      </Touchable>
-      <Touchable onPress={logOut}>
-        <LogOutButton>로그아웃</LogOutButton>
-      </Touchable>
-      <MenuList>
-        <Touchable onPress={toggleIsGrid}>
-          <MenuItem>
-            <Ionicons
-              color={isGrid ? Theme.blackColor : Theme.lightGreyColor}
-              name={Platform.OS === "ios" ? "ios-grid" : "md-grid"}
-              size={28}
-            />
-          </MenuItem>
-        </Touchable>
-        <Touchable onPress={toggleIsGrid}>
-          <MenuItem>
-            <Ionicons
-              color={!isGrid ? Theme.blackColor : Theme.lightGreyColor}
-              name={Platform.OS === "ios" ? "ios-list" : "md-list"}
-              size={28}
-            />
-          </MenuItem>
-        </Touchable>
-      </MenuList>
+    return (
+      <ScrollView>
+        <Header>
+          <AvatarContainer>
+            <Avatar source={{ uri: avatar }} />
+            <Bold>{fullName}</Bold>
+            <EditAvatarContainer
+              onPress={() => navigation.navigate("SelectProfile")}
+            >
+              <EditAvatar
+                source={{
+                  uri:
+                    "https://i.ya-webdesign.com/images/blue-plus-sign-png-4.png"
+                }}
+              />
+            </EditAvatarContainer>
+          </AvatarContainer>
+          <InfoContainer>
+            <InfoContent>
+              <Bold>{postCount}</Bold>
+              <Text>게시물 </Text>
+            </InfoContent>
+            <InfoContent>
+              <Bold>{followerCount}</Bold>
+              <Text>팔로워 </Text>
+            </InfoContent>
+            <InfoContent>
+              <Bold>{followingCount}</Bold>
+              <Text>팔로잉 </Text>
+            </InfoContent>
+          </InfoContainer>
+        </Header>
 
-      <PostList>
-        {posts.map(post =>
-          isGrid ? (
-            <SquarePhoto key={post.id} id={post.id} url={post.files[0].url} />
-          ) : (
-            <Post key={post.id} {...post} />
-          )
-        )}
-      </PostList>
-    </ScrollView>
-  );
-};
+        <Touchable>
+          <EditProfileButton>프로필 수정</EditProfileButton>
+        </Touchable>
+        <Touchable onPress={logOut}>
+          <LogOutButton>로그아웃</LogOutButton>
+        </Touchable>
+        <MenuList>
+          <Touchable onPress={toggleIsGrid}>
+            <MenuItem>
+              <Ionicons
+                color={isGrid ? Theme.blackColor : Theme.lightGreyColor}
+                name={Platform.OS === "ios" ? "ios-grid" : "md-grid"}
+                size={28}
+              />
+            </MenuItem>
+          </Touchable>
+          <Touchable onPress={toggleIsGrid}>
+            <MenuItem>
+              <Ionicons
+                color={!isGrid ? Theme.blackColor : Theme.lightGreyColor}
+                name={Platform.OS === "ios" ? "ios-list" : "md-list"}
+                size={28}
+              />
+            </MenuItem>
+          </Touchable>
+        </MenuList>
+
+        <PostList>
+          {posts.map(post =>
+            isGrid ? (
+              <SquarePhoto key={post.id} id={post.id} url={post.files[0].url} />
+            ) : (
+              <Post key={post.id} {...post} />
+            )
+          )}
+        </PostList>
+      </ScrollView>
+    );
+  }
+);

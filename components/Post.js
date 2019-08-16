@@ -29,9 +29,9 @@ const Header = styled.View`
 const HeaderInfo = styled.View``;
 
 const Avatar = styled.Image`
-  height: 40px;
-  width: 40px;
-  margin-right: 10px;
+  height: 30px;
+  width: 30px;
+  margin-right: 2px;
   border-radius: 20px;
 `;
 
