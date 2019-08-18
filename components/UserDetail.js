@@ -9,6 +9,7 @@ import { useQuery } from "react-apollo-hooks";
 import { Ionicons } from "@expo/vector-icons";
 import SquarePhoto from "./SquarePhoto";
 import Post from "./Post";
+import Loader from "./Loader";
 export const SEE_USER = gql`
   query seeUser($username: String!) {
     seeUser(username: $username) {
@@ -81,6 +82,7 @@ const MenuList = styled.View`
 const PostList = styled.View`
   margin-top: 2px;
   flex-direction: row;
+  flex-wrap: wrap;
 `;
 
 const Bold = styled.Text`
@@ -92,83 +94,84 @@ const Touchable = styled.TouchableOpacity``;
 
 export default ({ navigation }) => {
   const usernameP = navigation.getParam("username");
-  const {
-    data: {
-      seeUser: { user }
-    }
-  } = useQuery(SEE_USER, {
+  const { data, loading } = useQuery(SEE_USER, {
     variables: {
       username: usernameP
     }
   });
-  console.log(user);
   const [isGrid, setIsGrid] = useState(true);
   const toggleIsGrid = () => setIsGrid(p => !p);
-  const {
-    username,
-    avatar,
-    postCount,
-    followerCount,
-    followingCount,
-    posts
-  } = user;
+  let user = null;
+  if (data && data.seeUser && data.seeUser.user) {
+    user = data.seeUser.user;
+    console.log(user.posts);
+  }
   return (
     <ScrollView>
-      <Header>
-        <AvatarContainer>
-          <Avatar source={{ uri: avatar }} />
-          <Bold>{username}</Bold>
-        </AvatarContainer>
-        <InfoContainer>
-          <InfoContent>
-            <Bold>{postCount}</Bold>
-            <Text>게시물 </Text>
-          </InfoContent>
-          <InfoContent>
-            <Bold>{followerCount}</Bold>
-            <Text>팔로워 </Text>
-          </InfoContent>
-          <InfoContent>
-            <Bold>{followingCount}</Bold>
-            <Text>팔로잉 </Text>
-          </InfoContent>
-        </InfoContainer>
-      </Header>
+      {loading && <Loader />}
+      {!loading && data && data.seeUser && data.seeUser.user && (
+        <>
+          <Header>
+            <AvatarContainer>
+              <Avatar source={{ uri: user.avatar }} />
+              <Bold>{user.username}</Bold>
+            </AvatarContainer>
+            <InfoContainer>
+              <InfoContent>
+                <Bold>{user.postCount}</Bold>
+                <Text>게시물 </Text>
+              </InfoContent>
+              <InfoContent>
+                <Bold>{user.followerCount}</Bold>
+                <Text>팔로워 </Text>
+              </InfoContent>
+              <InfoContent>
+                <Bold>{user.followingCount}</Bold>
+                <Text>팔로잉 </Text>
+              </InfoContent>
+            </InfoContainer>
+          </Header>
 
-      <Touchable>
-        <EditProfileButton>프로필 수정</EditProfileButton>
-      </Touchable>
+          <Touchable>
+            <EditProfileButton>프로필 수정</EditProfileButton>
+          </Touchable>
 
-      <MenuList>
-        <Touchable onPress={toggleIsGrid}>
-          <MenuItem>
-            <Ionicons
-              color={isGrid ? Theme.blackColor : Theme.lightGreyColor}
-              name={Platform.OS === "ios" ? "ios-grid" : "md-grid"}
-              size={28}
-            />
-          </MenuItem>
-        </Touchable>
-        <Touchable onPress={toggleIsGrid}>
-          <MenuItem>
-            <Ionicons
-              color={!isGrid ? Theme.blackColor : Theme.lightGreyColor}
-              name={Platform.OS === "ios" ? "ios-list" : "md-list"}
-              size={28}
-            />
-          </MenuItem>
-        </Touchable>
-      </MenuList>
+          <MenuList>
+            <Touchable onPress={toggleIsGrid}>
+              <MenuItem>
+                <Ionicons
+                  color={isGrid ? Theme.blackColor : Theme.lightGreyColor}
+                  name={Platform.OS === "ios" ? "ios-grid" : "md-grid"}
+                  size={28}
+                />
+              </MenuItem>
+            </Touchable>
+            <Touchable onPress={toggleIsGrid}>
+              <MenuItem>
+                <Ionicons
+                  color={!isGrid ? Theme.blackColor : Theme.lightGreyColor}
+                  name={Platform.OS === "ios" ? "ios-list" : "md-list"}
+                  size={28}
+                />
+              </MenuItem>
+            </Touchable>
+          </MenuList>
 
-      <PostList>
-        {posts.map(post =>
-          isGrid ? (
-            <SquarePhoto key={post.id} id={post.id} url={post.files[0].url} />
-          ) : (
-            <Post key={post.id} {...post} />
-          )
-        )}
-      </PostList>
+          <PostList>
+            {user.posts.map(post =>
+              isGrid ? (
+                <SquarePhoto
+                  key={post.id}
+                  id={post.id}
+                  url={post.files[0].url}
+                />
+              ) : (
+                <Post key={post.id} {...post} />
+              )
+            )}
+          </PostList>
+        </>
+      )}
     </ScrollView>
   );
 };
