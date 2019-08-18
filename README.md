@@ -70,7 +70,7 @@ expo build:android
 
 
 ## ToDo
-
+- [ ] 검색시 유저 아바타 border radius 
 - [ ] 메세지 기능 
 - [ ] 구독 기능 
 - [ ] 사진 여러장 첨부
