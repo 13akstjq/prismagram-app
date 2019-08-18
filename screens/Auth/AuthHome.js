@@ -9,7 +9,7 @@ const View = styled.View`
 `;
 
 const Logo = styled.Image`
-  width: ${constants.width};
+  width: ${constants.width / 1.5};
   margin-bottom: 10px;
 `;
 
@@ -24,7 +24,10 @@ const LoginText = styled.Text`
 const AuthHome = ({ navigation: { navigate } }) => {
   return (
     <View>
-      <Logo resizeMode={"contain"} source={require("../../assets/logo.png")} />
+      <Logo
+        resizeMode={"contain"}
+        source={require("../../assets/logo_white.png")}
+      />
       <AuthButton
         text={"Create New Account"}
         onPress={() => navigate("Signup")}

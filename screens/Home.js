@@ -25,6 +25,7 @@ const Text = styled.Text``;
 export default () => {
   const [refreshing, setRefreshing] = useState(false); // 당겨서 새로고침에 사용될 state
   const { loading, data, refetch } = useQuery(FEED_QUERY);
+  console.log("Feed", data);
   const refresh = async () => {
     try {
       setRefreshing(true);
