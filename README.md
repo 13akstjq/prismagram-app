@@ -1,5 +1,5 @@
 # manstagram-app
-  reactnative 와 expo를 사용해서 인스타그램 앱을 클론한 프로젝트 입니다.  
+  reactnative 와 expo를 사용해서 인스타그램 앱을 클론한 프로젝트 입니다.  !!
   
   
 ## Usage 
